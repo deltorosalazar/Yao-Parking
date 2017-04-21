@@ -49,6 +49,7 @@ Route::post('/vehicle_types/update', 'VehicleTypeController@update');
 Route::post('/vehicle_types/changeState', 'VehicleTypeController@changeState');
 
 Route::get('/movements', 'MovementController@index');
+Route::get('/simulations', 'SimulationController@index');
 
 
 Route::get('/redis', function() {

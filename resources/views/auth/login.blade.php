@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+    <link href="../css/bootstrap3.min.css" rel="stylesheet">
+
 @section('content')
 <div class="container">
     <div class="row">

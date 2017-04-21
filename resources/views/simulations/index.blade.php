@@ -115,7 +115,7 @@
                     </li>
                     <li class="list-group-item">
                         <span class="badge">1</span>
-                        
+
                     </li>
                 </ul>
             </div>
@@ -276,7 +276,7 @@
         	autoclose: true,
         	todayHighlight: true,
             language: 'sp',
-            orientation: 'right',
+            orientation: 'bottom',
             todayHighlight: true
         });
 
