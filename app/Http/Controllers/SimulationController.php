@@ -488,7 +488,7 @@ class SimulationController extends Controller {
 
     public function startSimulation($id, $start_date, $finish_date) {
 
-        echo "LA SIMULACION INICIO A LAS " . Carbon::now();
+        $intial_time = Carbon::now();
         ini_set('max_execution_time', 3600);
 
         // $actual_date = Carbon::create(2012, 1, 31, 6, 0);
@@ -611,14 +611,35 @@ class SimulationController extends Controller {
 
         $this->fillQuotasTable();
 
-        echo '<br>';
-        echo '<br>';
-        echo '<br>';
-        echo 'Fecha Final:    ' . $actual_date;
-        echo "LA SIMULACION FINALIZO A LAS " . Carbon::now();
+        // echo '<br>';
+        // echo '<br>';
+        // echo '<br>';
+        // echo 'Fecha Final:    ' . $actual_date;
+        $final_time = Carbon::now();
 
+        $results = array(
+            'simulation_initial_date' => $start_date,
+            'simulation_finish_date' => $finish_date,
+            'initial_time' => $intial_time,
+            'final_time' => $final_time,
+        );
+
+
+        $this->completed($results);
         // return Redirect::action('SimulationController@index');
 
+    }
+
+    public function completed($results) {
+
+        return view('simulations.completed', [
+            'title' => 'Simulación Finalizada',
+            'simulation_initial_date' => $results['simulation_initial_date'],
+            'simulation_finish_date' => $results['simulation_finish_date'],
+            'initial_time' => $results['initial_time'],
+            'final_time' => $results['final_time'],
+            'total_duration' => Carbon::parse($results['initial_date'])->diffInMinutes($results['finish_date']),
+        ]);
     }
 
 }

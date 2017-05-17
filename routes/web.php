@@ -67,6 +67,7 @@ Route::get('/simulations/show/{id}', 'SimulationController@show');
 Route::post('/simulations/store', 'SimulationController@store');
 Route::get('/simulations/start', 'SimulationController@startSimulation');
 Route::post('/simulations/monthly_earnings', 'SimulationController@computeMonthlyEarnings');
+Route::get('/simulations/completed', 'SimulationController@completed');
 
 Route::get('/simulations/test', 'SimulationController@testSimulation');
 
