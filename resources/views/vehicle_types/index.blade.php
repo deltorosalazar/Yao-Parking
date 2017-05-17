@@ -29,19 +29,19 @@
                         @if ($prices->count() > 0)
                             <div class="form-group">
                                 <label>Nombre</label>
-                                <input class="form-control" name="vehicle-type-name" id="vehicle-type-name" placeholder="Nombre del Tipo de Vehículo">
+                                <input disabled class="form-control" name="vehicle-type-name" id="vehicle-type-name" placeholder="Nombre del Tipo de Vehículo">
                             </div>
                             <div id="vehicle-type-prices">
                                 @foreach ($prices as $price)
                                     <div class="form-group">
                                         <label>{{ $price->name }}</label>
-                                        <input class="form-control" name="{{ $price->id }}" placeholder="Valor {{ $price->name }} ($)">
+                                        <input disabled class="form-control" name="{{ $price->id }}" placeholder="Valor {{ $price->name }} ($)">
                                     </div>
                                 @endforeach
                             </div>
 
                             <div class="form-group">
-                                <button type="button" class="pull-right btn btn-primary" id="store-button">Agregar</button>
+                                <button disabled type="button" class="pull-right btn btn-primary" id="store-button">Agregar</button>
                             </div>
                         @else
                             <a href="{{ url('/prices') }}">
@@ -164,115 +164,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-        <div class="page-header">
-            <h1>Panels</h1>
-        </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-green">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-yellow">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-red">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-        </div>
-
-        <div class="page-header">
-            <h1>Wells</h1>
-        </div>
-        <div class="well">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur.</p>
-        </div>
-
     </div>
 
 

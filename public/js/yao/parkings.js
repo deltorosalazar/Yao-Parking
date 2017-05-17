@@ -5,34 +5,33 @@ $.ajaxSetup({
 });
 
 $('.edit-modal').on('click', function() {
-    $('#price-name-modal').val($(this).data('name'));
-    $('#price-id-modal').val($(this).data('id'));
+    $('#parking-name-modal').val($(this).data('name'));
+    $('#parking-id-modal').val($(this).data('id'));
 });
 
 $('#store-button').on('click', function() {
     $.ajax({
         type: 'POST',
-        url: '/prices/store',
+        url: '/parkings/store',
         data: {
-            'name': $('input[name=price_name]').val()
+            'name': $('input[name=parking_name]').val()
         },
         success: function(data) {
             if ((data.errors)){
 
-
-                if (data.errors.price_name) {
+                if (data.errors.parking_name) {
                     console.log('entre');
-                    $('.price_name_error').removeClass('hidden');
-                    $('.price_name_error .myError').text(data.errors.price_name);
-                    $('#price_name').addClass('input-errors');
+                    $('.parking_name_error').removeClass('hidden');
+                    $('.parking_name_error .myError').text(data.errors.parking_name);
+                    $('#parking_name').addClass('input-errors');
                 }
 
                 setTimeout(function(){
-                    $('.price_name_error').fadeOut( "slow" );
+                    $('.parking_name_error').fadeOut( "slow" );
                 }, 2000);
             } else {
-                $('#prices-table tbody').append(`
-                    <tr id=price-` + data.id + `>
+                $('#parking-table tbody').append(`
+                    <tr id=parking-` + data.id + `>
                         <td>
                             <a
                                 data-toggle="popover"
@@ -55,7 +54,7 @@ $('#store-button').on('click', function() {
                             <button
                                 type="button"
                                 data-toggle="modal"
-                                data-target="#prices-modal"
+                                data-target="#parkings-modal"
                                 data-id="` + data.id + `"
                                 data-name="` + data.name +`"
                                 class="pull-right btn btn-primary edit-modal edit-` + data.id + `">
@@ -71,7 +70,7 @@ $('#store-button').on('click', function() {
                     });
                 });
 
-                $('#price_name').val('');
+                $('#parking_name').val('');
             }
         }
     });
@@ -80,18 +79,18 @@ $('#store-button').on('click', function() {
 $('#update-button').on('click', function() {
     $.ajax({
         type: 'POST',
-        url: '/prices/update',
+        url: '/parkings/update',
         data: {
-            'id': $('input[name=price-id-modal]').val(),
-            'name': $('input[name=price-name-modal]').val()
+            'id': $('input[name=parking-id-modal]').val(),
+            'name': $('input[name=parking-name-modal]').val()
         },
         success: function(data) {
             if ((data.errors)){
                 // $('.error').removeClass('hidden');
                 // $('.error').text(data.errors.name);
             } else {
-                $('#price-' + data.id).replaceWith(`
-                    <tr id=price-` + data.id + `>
+                $('#parking-' + data.id).replaceWith(`
+                    <tr id=parking-` + data.id + `>
                         <td>
                             <a
                                 data-toggle="popover"
@@ -114,7 +113,7 @@ $('#update-button').on('click', function() {
                             <button
                                 type="button"
                                 data-toggle="modal"
-                                data-target="#prices-modal"
+                                data-target="#parkings-modal"
                                 data-id="` + data.id + `"
                                 data-name="` + data.name +`"
                                 class="pull-right btn btn-primary edit-modal edit-` + data.id + `">
@@ -125,7 +124,7 @@ $('#update-button').on('click', function() {
                 );
 
                 $(document).ajaxComplete(function() {
-                    $('#prices-modal').modal('hide');
+                    $('#parkings-modal').modal('hide');
 
                     $('[data-toggle="popover"]').popover({
                         placement: 'bottom'
@@ -140,7 +139,7 @@ $('.state-button').on('click', function() {
     console.log('clicked');
     $.ajax({
         type: 'POST',
-        url: '/prices/changeState',
+        url: '/parkings/changeState',
         data: {
             'id': $(this).data('id')
         },

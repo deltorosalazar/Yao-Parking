@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Validator;
+use Illuminate\Support\Facades\Input;
+use Response;
 use App\Price;
 
 class PriceController extends Controller {
@@ -16,12 +19,27 @@ class PriceController extends Controller {
     }
 
     public function store(Request $request) {
-        $price = new Price();
-        $price->name = $request->name;
+        $rules = array(
+            'price_name' => 'required',
+        );
 
-        $price->save();
+        $messages = [
+            'price_name.required' => 'Ingrese un Nombre',
+        ];
 
-        return response()->json($price);
+        $validator = Validator::make(Input::all(), $rules, $messages);
+        if ($validator->fails()) {
+            return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
+        } else {
+            $price = new Price();
+            $price->name = $request->name;
+
+            $price->save();
+
+            return response()->json($price);
+        }
+
+
     }
 
     public function update(Request $request) {
@@ -39,7 +57,7 @@ class PriceController extends Controller {
 
         $price->save();
 
-        return response()->json($price); 
+        return response()->json($price);
 
     }
 }

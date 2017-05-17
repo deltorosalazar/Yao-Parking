@@ -14,4 +14,8 @@ class VehicleType extends Model {
                     ->withPivot('id', 'value')
                     ->withTimestamps();
     }
+
+    public function quotas() {
+        return $this->belongsToMany('App\Quota');
+    }
 }

@@ -26,26 +26,51 @@
                         <h3 class="panel-title">Agregar Simulación</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="form-group">
-                            <label>Fecha de Inicio</label>
-                            <input class="form-control" id="simu-start-date" type="text" placeholder="Fecha de Inicio">
-                        </div>
-                        <div class="form-group">
-                            <label>Fecha de Finalización</label>
-                            <input class="form-control" id="simu-finish-date" type="text" placeholder="Fecha de Finalización">
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="pull-right btn btn-primary" id="store-button">Iniciar Simulación</button>
-                        </div>
+                        <form class="" action="/simulations/store" method="post">
+                            {{ csrf_field() }}
+
+                            <div class="bs-component start_date_error hidden">
+                                <div class="alert alert-dismissible alert-danger">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    {{-- <strong>Error!</strong> <a href="#" class="alert-link">Change a few things up</a> and try submitting again. --}}
+                                    <strong class="myError">Error!</strong>
+                                </div>
+                                <div id="source-button" class="btn btn-primary btn-xs" style="display: none;">&lt; &gt;</div>
+                            </div>
+
+                            <div class="bs-component end_date_error hidden">
+                                <div class="alert alert-dismissible alert-danger">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    {{-- <strong>Error!</strong> <a href="#" class="alert-link">Change a few things up</a> and try submitting again. --}}
+                                    <strong class="myError">Error!</strong>
+                                </div>
+                                <div id="source-button" class="btn btn-primary btn-xs" style="display: none;">&lt; &gt;</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Fecha de Inicio</label>
+                                <input type="text" class="form-control" name="start_date" data-field="datetime" id="start_date" placeholder="Fecha de Inicio">
+
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha de Finalización</label>
+                                <input type="text" class="form-control" name="finish_date" data-field="datetime" id="finish_date" placeholder="Fecha de Finalización" >
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="pull-right btn btn-primary" id="store-button">Iniciar Simulación</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-striped" id="roles-table">
+                    <table class="table table-bordered table-hover table-striped" id="simulations-table">
                         <thead>
                             <tr>
-                                <th>Nombre</th>
+                                <th>ID</th>
+                                <th>Fecha de Inicio</th>
+                                <th>Fecha de Finalización</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -53,46 +78,15 @@
                             @foreach ($simulations as $simulation)
                                 <tr id="role-{{ $simulation->id }}">
                                     <td>
-                                        <a
-                                        data-toggle="popover"
-                                        title="<b>Detalles</b>"
-                                        data-html="true"
-                                        data-content="
-                                            <b>ID:</b> {{ $simulation->id }} <br>
-                                            <b>Fecha de Creación:</b> {{ $simulation->created_at }} <br>
-                                            <b>Última Modificación:</b> {{ $simulation->updated_at }}"
-                                        style="cursor: pointer">
-                                            {{ $simulation->name }}
+                                        <a style="cursor: pointer" href="/simulations/show/{{ $simulation->id }}">
+                                            {{ $simulation->id }}
                                         </a>
                                     </td>
                                     <td>
-                                        <button
-                                            type="button"
-                                            data-id="{{ $simulation->id }}"
-                                            class="pull-right state-button change-state-{{ $simulation->id }}
-                                            @if ($simulation->active == 1)
-                                                btn btn-danger"
-                                                >Desactivar
-                                            @else
-                                                pull-right btn btn-success"
-                                                >Activar
-                                            @endif
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            data-toggle="modal"
-                                            data-target="#roles-modal"
-                                            data-id="{{ $simulation->id }}"
-                                            data-name="{{ $simulation->name }}"
-                                            class="pull-right btn btn-primary edit-modal edit-{{ $simulation->id }}"
-                                            @if ($simulation->active == 0)
-                                                disabled="">
-                                            @else
-                                                >
-                                            @endif
-                                            Editar
-                                        </button>
+                                        {{ $simulation->start_date }}
+                                    </td>
+                                    <td>
+                                        {{ $simulation->finish_date }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -106,190 +100,49 @@
             <div class="col-md-6">
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <span class="badge">100</span>
-                        Total Parqueaderos
+                        <span class="badge">{{ count($total_parkings) }}</span>
+                        Total de
+                        <a href="{{ url('/parkings') }}">Parqueaderos</a>
                     </li>
                     <li class="list-group-item">
-                        <span class="badge">3</span>
-                        Total Tipos de Vehículos
-                    </li>
-                    <li class="list-group-item">
-                        <span class="badge">1</span>
-
+                        <span class="badge">{{ $total_vehicle_types }}</span>
+                        Total de
+                        <a href="{{ url('/vehicle_types') }}">Tipos de Vehículos</a>
                     </li>
                 </ul>
             </div>
         </div>
 
 
-        <div class="modal fade" id="roles-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Editar Rol</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="col-lg-2 control-label" for="role-name-modal">Nombre</label>
-                                    <div class="col-lg-10">
-                                        <input type="hidden" name="role-id-modal" id="role-id-modal">
-                                        <input class="form-control" type="text" placeholder="Nombre del Rol" name="role-name-modal" id="role-name-modal">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" id="update-button">Editar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-
-        <div class="page-header">
-            <h1>Panels</h1>
-        </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-green">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-yellow">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-red">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-        </div>
-
-        <div class="page-header">
-            <h1>Wells</h1>
-        </div>
-        <div class="well">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur.</p>
-        </div>
-
+        <div id="dtBox"></div>
     </div>
 
 
 @endsection
 
 @section('libraries')
-    <script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
+
+    <script type="text/javascript" src="{{ URL::asset('js/DateTimePicker.min.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('/js/DateTimePicker-i18n.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+			$("#dtBox").DateTimePicker({
+                language: 'es',
+                dateTimeFormat: 'yyyy-MM-dd hh:mm:ss',
+                minTime: '06:00:00',
+                maxTime: '23:00:00',
+                setButtonContent: 'Seleccionar'
+            });
+		});
+    </script>
 
     <script type="text/javascript">
         $('[data-toggle="popover"]').popover({
             placement : 'bottom'
         });
-
-        $('#simu-start-date').datepicker({
-        	format: "dd/mm/yyyy",
-        	autoclose: true,
-        	todayHighlight: true,
-            language: 'sp',
-            orientation: 'bottom',
-            todayHighlight: true
-        });
-
-        $('#simu-finish-date').datepicker({
-        	format: "dd/mm/yyyy",
-        	autoclose: true,
-        	todayHighlight: true,
-            language: 'es',
-            orientation: 'right',
-            todayHighlight: true
-        });
     </script>
 
-    <script type="text/javascript" src="/js/yao/roles.js"></script>
+    {{-- <script type="text/javascript" src="/js/yao/simulations.js"></script> --}}
 
 @endsection

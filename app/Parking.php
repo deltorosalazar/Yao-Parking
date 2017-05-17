@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Simulation extends Model {
+class Parking extends Model {
 
     protected $fillable = [
-        'start_date', 'finish_date',
+        'name'
     ];
 
-    public function parkings() {
-        return $this->belongsToMany('App\Parking', 'simulation_details', 'simulation_id', 'parking_id');
+    public function simulations() {
+        return $this->belongsToMany('App\Simulation', 'simulation_details', 'parking_id', 'simulation_id');
     }
 
     // public function vehicle_types() {

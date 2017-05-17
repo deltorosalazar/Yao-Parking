@@ -30,19 +30,19 @@
                             <div class="col-sm-8">
                                 <div class="form-group">
                                     <label>Nombre</label>
-                                    <input class="form-control" name="tax-name" id="tax-name" placeholder="Nombre del Impuesto">
+                                    <input class="form-control" name="tax-name" id="tax-name" placeholder="Nombre del Impuesto" disabled="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Porcentaje (%)</label>
-                                    <input class="form-control" name="tax-percentage" id="tax-percentage" placeholder="%">
+                                    <input class="form-control" name="tax-percentage" id="tax-percentage" placeholder="%" disabled="">
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <button type="button" class="pull-right btn btn-primary" id="store-button">Agregar</button>
+                            <button type="button" class="pull-right btn btn-primary disabled" id="store-button">Agregar</button>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                                         <button
                                             type="button"
                                             data-id="{{ $tax->id }}"
-                                            class="pull-right state-button change-state-{{ $tax->id }}
+                                            class="pull-right state-button change-state-{{ $tax->id }} disabled
                                             @if ($tax->active == 1)
                                                 btn btn-danger"
                                                 >Desactivar
@@ -129,7 +129,7 @@
                                     <label class="col-lg-6 control-label" for="tax-name-modal">Nombre</label>
                                     <div class="col-lg-12">
                                         <input type="hidden" name="tax-id-modal" id="tax-id-modal">
-                                        <input class="form-control" type="text" placeholder="Nombre del Rol" name="tax-name-modal" id="tax-name-modal">
+                                        <input class="form-control" type="text" placeholder="Nombre del Rol" name="tax-name-modal" id="tax-name-modal" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -151,113 +151,6 @@
             </div>
         </div>
 
-
-
-
-
-
-        <div class="page-header">
-            <h1>Panels</h1>
-        </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-green">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-yellow">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-            <div class="col-sm-4">
-                <div class="panel panel-red">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Panel title</h3>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-            <!-- /.col-sm-4 -->
-        </div>
-
-        <div class="page-header">
-            <h1>Wells</h1>
-        </div>
-        <div class="well">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cras mattis consectetur purus sit amet fermentum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur.</p>
-        </div>
 
     </div>
 

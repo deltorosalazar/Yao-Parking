@@ -11,16 +11,22 @@
     <title>SB Admin - Bootstrap Admin Template</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="../css/bootstrap3.min.css" rel="stylesheet">
+
+    <link href="{{ URL::asset('/css/bootstrap3.min.css') }}" rel="stylesheet">
+    <link href="{{ URL::asset('/css/DateTimePicker.css') }}" rel="stylesheet">
+    {{-- <link rel="stylesheet" type="text/css" href="../css/DateTimePicker.css" /> --}}
+    {{-- <link href="../css/bootstrap3.min.css" rel="stylesheet"> --}}
+
 
     <!-- Custom CSS -->
-    <link href="css/sb-admin.css" rel="stylesheet">
-
-    <!-- Morris Charts CSS -->
-    <link href="css/plugins/morris.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('/css/sb-admin.css') }}" />
+    {{-- <link href="../css/sb-admin.css" rel="stylesheet"> --}}
 
     <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('/font-awesome/css/font-awesome.min.css') }}" />
+    {{-- <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> --}}
+
+
 </head>
 
 <body>
@@ -40,98 +46,8 @@
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
-                    <ul class="dropdown-menu message-dropdown">
-                        <li class="message-preview">
-                            <a href="#">
-                                <div class="media">
-                                    <span class="pull-left">
-                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
-                                    </span>
-                                    <div class="media-body">
-                                        <h5 class="media-heading"><strong>John Smith</strong>
-                                        </h5>
-                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="message-preview">
-                            <a href="#">
-                                <div class="media">
-                                    <span class="pull-left">
-                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
-                                    </span>
-                                    <div class="media-body">
-                                        <h5 class="media-heading"><strong>John Smith</strong>
-                                        </h5>
-                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="message-preview">
-                            <a href="#">
-                                <div class="media">
-                                    <span class="pull-left">
-                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
-                                    </span>
-                                    <div class="media-body">
-                                        <h5 class="media-heading"><strong>John Smith</strong>
-                                        </h5>
-                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="message-footer">
-                            <a href="#">Read All New Messages</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
-                    <ul class="dropdown-menu alert-dropdown">
-                        <li>
-                            <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
-                        </li>
-                        <li>
-                            <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
-                        </li>
-                        <li>
-                            <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
-                        </li>
-                        <li>
-                            <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
-                        </li>
-                        <li>
-                            <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
-                        </li>
-                        <li>
-                            <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">View All</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
                         <li>
                             <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
@@ -141,14 +57,14 @@
 
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li class="active">
+                    <li class="{{ Request::is('simulations') ? 'active' : '' }}">
                         <a href="{{ url('/simulations') }}"><i class="fa fa-fw fa-dashboard"></i> Simulaciones</a>
                     </li>
-                    <li>
+                    <li class="{{ Request::is('taxes') ? 'active' : '' }}">
                         <a href="{{ url('/taxes') }}"><i class="fa fa-fw fa-bar-chart-o"></i> Impuestos</a>
                     </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Gestión de Usuarios <i class="fa fa-fw fa-caret-down"></i></a>
+                    <li class="{{ Request::is('users') || Request::is('roles') ? 'active' : '' }}">
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo" class="{{ !Request::is('users') || !Request::is('roles') ? 'collapsed' : '' }}" aria-expanded="{{ Request::is('users') || Request::is('roles') ? 'true' : '' }}"><i class="fa fa-fw fa-arrows-v"></i> Gestión de Usuarios <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse">
                             <li>
                                 <a href="{{ url('/users') }}"><i class="fa fa-fw fa-dashboard"></i> Usuarios</a>
@@ -158,37 +74,14 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li class="{{ Request::is('prices') ? 'active' : '' }}">
                         <a href="{{ url('/prices') }}"><i class="fa fa-fw fa-bar-chart-o"></i> Tarifas</a>
                     </li>
-                    <li>
+                    <li class="{{ Request::is('vehicle_types') ? 'active' : '' }}">
                         <a href="{{ url('/vehicle_types') }}"><i class="fa fa-fw fa-table"></i> Tipos de Vehículo</a>
                     </li>
-                    <li>
-                        <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Forms</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Gestión de Usuarios <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo" class="collapse">
-                            <li>
-                                <a href="{{ url('/users') }}">Usuarios</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/roles') }}">Roles</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="blank-page.html"><i class="fa fa-fw fa-file"></i> Blank Page</a>
-                    </li>
-                    <li>
-                        <a href="index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
+                    <li class="{{ Request::is('parkings/*') || Request::is('parkings') ? 'active' : '' }}">
+                        <a href="{{ url('/parkings') }}"><i class="fa fa-fw fa-table"></i> Parqueaderos</a>
                     </li>
                 </ul>
             </div>
@@ -199,13 +92,12 @@
         </div>
     </div>
 
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    {{-- <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script> --}}
 
-    <!-- Morris Charts JavaScript -->
-    <script src="js/plugins/morris/raphael.min.js"></script>
-    <script src="js/plugins/morris/morris.min.js"></script>
-    <script src="js/plugins/morris/morris-data.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     @yield('libraries')
 
