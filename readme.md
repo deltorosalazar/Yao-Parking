@@ -1,4 +1,4 @@
-<p align="center"><img src="http://i1122.photobucket.com/albums/l530/Pipetit96/Avances%202.png"></p>
+<p align="center"><img style="width: 50%;" src="http://i1122.photobucket.com/albums/l530/Pipetit96/Avances%202.png"></p>
 
 ## YaoParking
 
