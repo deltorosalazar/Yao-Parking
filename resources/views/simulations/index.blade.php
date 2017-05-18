@@ -1,5 +1,9 @@
 @extends('layouts.dashboard')
 
+@section('title')
+    <title>YaoParking || {{ $title }}</title>
+@endsection
+
 @section('content')
     {{ csrf_field() }}
     <div class="container-fluid">
@@ -13,12 +17,38 @@
                         <i class="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>
                     </li>
                     <li class="active">
-                        <i class="fa fa-desktop"></i> {{ $title }}
+                        <i class="fa fa-desktop"></i> {{ session('status')['title'] }}
                     </li>
                 </ol>
             </div>
         </div>
-
+        @if (session('status'))
+            <div class="alert alert-success">
+                <p>La Simulación fue:</p>
+                <p>
+                    <b>Desde: </b>{{ session('status')['initial_date'] }}
+                </p>
+                <p>
+                    <b>Hasta: </b>{{ session('status')['final_date'] }}
+                </p>
+                <hr>
+                <p>La Simulación</p>
+                <p>
+                    <b>Empezó el: </b>{{ session('status')['initial_time'] }}
+                </p>
+                <p>
+                    <b>Terminó el: </b>{{ session('status')['final_time'] }}
+                </p>
+                <p>
+                    <b>Duración Total (En minutos): </b>{{ session('status')['total_duration'] }}
+                </p>
+                @if (session('status')['total_duration'] > 60)
+                    <p>
+                        <b>Duración Total (En horas): </b> {{ ceil( session('status')['total_duration'] / 60) }}
+                    </p>
+                @endif
+            </div>
+        @endif
         <div class="row">
             <div class="col-sm-6">
                 <div class="panel panel-primary">
@@ -71,7 +101,6 @@
                                 <th>ID</th>
                                 <th>Fecha de Inicio</th>
                                 <th>Fecha de Finalización</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>

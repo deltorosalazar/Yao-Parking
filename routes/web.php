@@ -70,6 +70,7 @@ Route::post('/simulations/monthly_earnings', 'SimulationController@computeMonthl
 Route::get('/simulations/completed', 'SimulationController@completed');
 
 Route::get('/simulations/test', 'SimulationController@testSimulation');
+Route::get('/simulations/improve', 'SimulationController@improveQuotas');
 
 
 Route::get('/dates', function() {

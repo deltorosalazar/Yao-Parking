@@ -25,16 +25,21 @@ class ParkingController extends Controller {
         }
 
         $simulations = DB::table('simulation_details')
-            ->select('simulation_id')
+            ->select('simulation_id', DB::raw('sum(price) as total'))
             ->where('parking_id', $id)
-            ->distinct()
+            ->groupBy('simulation_id')
             ->get();
 
-        // foreach ($simulations as $s) {
-        //     var_dump($s);
-        //     echo "<br>";
-        //     echo "<br>";
-        // }
+
+        $simulations_ids = array();
+        $total_by_simulations = array();
+
+        foreach ($simulations as $s) {
+            $simulations_ids[] = ($s->simulation_id);
+            $total_by_simulations[] = ($s->total);
+        }
+
+        // exit;
 
         // dd($simulations);
         // exit;
@@ -44,7 +49,9 @@ class ParkingController extends Controller {
             'id' => $id,
             'title' => 'Parqueadero #' . $parking->id,
             'parking_name' => $parking->name,
-            'simulations' => $simulations
+            'simulations' => $simulations,
+            'simluations_ids' => $simulations_ids,
+            'total_by_simulations' => $total_by_simulations
         ]);
     }
 

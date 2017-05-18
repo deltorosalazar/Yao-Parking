@@ -22,7 +22,7 @@ $('#monthly_button').on('click', function() {
                 var head = "";
                 var rows = "";
                 var totalEarnings = 0;
-
+                var parking = data[2];
 
                 $.each(data[1], function(index, value) {
                     head += head + '<th>' + value.name + ' (-' + value.percentage + '%)';
@@ -46,14 +46,17 @@ $('#monthly_button').on('click', function() {
                         });
 
                         totalEarnings += Number(valueMonth.total);
-                        
+
                     rows += '<tr>'
                 });
 
                 $('.monthly_table').append(`
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover table-striped" id="simulations-table">
+                            <table class="table table-bordered table-hover table-striped" id="monthly-table">
+                                <b>Parqueadero #` +
+                                    parking +
+                                ` </b>
                                 <thead>
                                     <tr>
                                         <th>Mes</th>
@@ -70,6 +73,7 @@ $('#monthly_button').on('click', function() {
                                         </td>` + String(computeTaxes(data[1], totalEarnings)) + `
                                     </tr>
                                 </tbody>
+
                             <table>
                         <div>
                     <div>`

@@ -1,5 +1,9 @@
 @extends('layouts.dashboard')
 
+@section('title')
+    <title>YaoParking || {{ $title }}</title>
+@endsection
+
 @section('content')
     {{ csrf_field() }}
     <div class="container-fluid">

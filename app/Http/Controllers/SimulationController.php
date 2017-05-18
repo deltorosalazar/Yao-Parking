@@ -35,6 +35,10 @@ class SimulationController extends Controller {
     private static $vehicle_id = 1;
 
     public function index() {
+        // echo memory_get_usage();
+        // var_dump($this->getSystemMemInfo());
+        // exit;
+
         $simulations = Simulation::all();
         $total_parkings = Parking::where('active', 1)->get();
         $total_vehicle_types = VehicleType::count();
@@ -46,6 +50,9 @@ class SimulationController extends Controller {
             'total_vehicle_types' => $total_vehicle_types
         ]);
     }
+
+
+
 
     public function store(Request $request) {
 
@@ -81,8 +88,18 @@ class SimulationController extends Controller {
             // dd($simulation);
             // exit;
 
-            $this->startSimulation($simulation->id, $start_date, $finish_date);
+            $result = $this->startSimulation($simulation->id, $start_date, $finish_date);
             // return response()->json($simulation);
+
+            // dd($result);
+            // exit;
+
+
+
+            return view('simulations.completed', [
+                'title' => 'Simulación Finalizada',
+                'status' => $result
+            ]);
         // }
     }
 
@@ -208,10 +225,9 @@ class SimulationController extends Controller {
         $allResponse[] = $monthly_earnings;
 
         $taxes = Tax::where('active', 1)->get();
-
-
-
         $allResponse[] = $taxes;
+
+        $allResponse[] = $request->parking;
 
         return response()->json($allResponse);
     }
@@ -223,15 +239,14 @@ class SimulationController extends Controller {
 
         $total_days = 1;
 
+
         $parkings_to_improve = array();
         $parkings_to_improve_motorcycle = array();
         $parkings_to_improve_bicycle = array();
 
         foreach ($quotas_motorcycle as $quota) {
             if (($quota->vehicles_exceeded / $total_days) > (($quota->max_quantity) - $quota->max_quantity / 2)) {
-                $parkings_to_improve_motorcycle[] =
-                    $quota->parking_id;
-
+                $parkings_to_improve_motorcycle[] = $quota->parking_id;
             }
         }
 
@@ -241,8 +256,20 @@ class SimulationController extends Controller {
             }
         }
 
-        $parkings_to_improve[] = $parkings_to_improve_motorcycle;
-        $parkings_to_improve[] = $parkings_to_improve_bicycle;
+        $parkings_to_improve[] = array(
+            'vehicle_type' => 'Motos',
+            'parkings' => $parkings_to_improve_motorcycle
+        );
+
+        $parkings_to_improve[] = array(
+            'vehicle_type' => 'Bicicletas',
+            'parkings' => $parkings_to_improve_bicycle
+        );
+
+        // foreach ($parkings_to_improve as $parking) {
+        //     dd($parking);
+        // }
+        // exit;
 
         return $parkings_to_improve;
     }
@@ -488,7 +515,9 @@ class SimulationController extends Controller {
 
     public function startSimulation($id, $start_date, $finish_date) {
 
-        $intial_time = Carbon::now();
+        Redis::flushAll();
+
+        $initial_time = Carbon::now(-5);
         ini_set('max_execution_time', 3600);
 
         // $actual_date = Carbon::create(2012, 1, 31, 6, 0);
@@ -521,7 +550,7 @@ class SimulationController extends Controller {
         $existingParkings = count(Redis::keys('parking:*'));
 
 
-        while(!$actual_date->isSameDay($end_date)) {
+        while(!$actual_date->gte($end_date)) {
         // for ($j=0; $j < $total_minutes; $j++) {
             for ($i=1; $i <= $existingParkings; $i++) {
             // for ($i=1; $i <= $existingParkings; $i++) {
@@ -615,17 +644,55 @@ class SimulationController extends Controller {
         // echo '<br>';
         // echo '<br>';
         // echo 'Fecha Final:    ' . $actual_date;
-        $final_time = Carbon::now();
+
+        $final_time = Carbon::now(-5);
+
+        // return redirect()->route('simulations.completed', [
+        //     'title' => 'Simulación Finalizada',
+        //     'simulation_initial_date' => $start_date,
+        //     'simulation_finish_date' => $finish_date,
+        //     'initial_time' => $initial_time,
+        //     'final_time' => $final_time,
+        //     'total_duration' => Carbon::parse($initial_time)->diffInMinutes($final_time),
+        // ]);
+
+        // return view('simulations.completed', [
+        //     'title' => 'Simulación Finalizada',
+        //     'simulation_initial_date' => $start_date,
+        //     'simulation_finish_date' => $finish_date,
+        //     'initial_time' => $initial_time,
+        //     'final_time' => $final_time,
+        //     'total_duration' => Carbon::parse($initial_time)->diffInMinutes($final_time),
+        // ]);
+
+        setlocale(LC_TIME, 'Spanish');
+
+
+        $allocated_memory = memory_get_usage()/1048576;
+        $total_duration = $initial_time->diffInSeconds($final_time);
 
         $results = array(
+            'title' => 'Simulación Finalizada',
             'simulation_initial_date' => $start_date,
             'simulation_finish_date' => $finish_date,
-            'initial_time' => $intial_time,
-            'final_time' => $final_time,
+            'initial_time' => $initial_time->copy()->toDayDateTimeString(),
+            'final_time' => $final_time->copy()->toDayDateTimeString(),
+            'total_duration' => $total_duration,
         );
 
+        // dd($results);
 
-        $this->completed($results);
+
+        $simulation = Simulation::find($id);
+        $simulation->total_duration = $total_duration;
+        $simulation->allocated_memory = $allocated_memory;
+        $simulation->save();
+
+
+        return $results;
+
+        // $this->completed($results);
+
         // return Redirect::action('SimulationController@index');
 
     }
@@ -638,7 +705,7 @@ class SimulationController extends Controller {
             'simulation_finish_date' => $results['simulation_finish_date'],
             'initial_time' => $results['initial_time'],
             'final_time' => $results['final_time'],
-            'total_duration' => Carbon::parse($results['initial_date'])->diffInMinutes($results['finish_date']),
+            'total_duration' => Carbon::parse($results['initial_time'])->diffInMinutes($results['final_time']),
         ]);
     }
 

@@ -17,6 +17,8 @@ class CreateSimulationsTable extends Migration
             $table->increments('id');
             $table->timestamp('start_date')->nullable();
             $table->timestamp('finish_date')->nullable();
+            $table->integer('total_duration')->default(0);
+            $table->integer('allocated_memory')->default(0);
             $table->tinyInteger('active')->default('1');
             $table->timestamps();
         });

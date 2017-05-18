@@ -1,5 +1,9 @@
 @extends('layouts.dashboard')
 
+@section('title')
+    <title>YaoParking || {{ $title }}</title>
+@endsection
+
 @section('content')
     {{ csrf_field() }}
     <div class="container-fluid">
@@ -20,10 +24,29 @@
         </div>
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6 col-md-offset-3">
                 <div class="well">
-                    <p><b>Fecha de Inicio: </b>{{ $simulation->start_date }}</p>
-                    <p><b>Fecha de Finalización: </b>{{ $simulation->finish_date }} </p>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p><b>Fecha de Inicio: </b>{{ $simulation->start_date }}</p>
+                            <p><b>Fecha de Finalización: </b>{{ $simulation->finish_date }} </p>
+                            <p>
+                                <b>Tiempo Transcurrido en la Simulación (Días): </b>
+                                {{ \Carbon\Carbon::parse($simulation->start_date)->diffInDays(\Carbon\Carbon::parse($simulation->finish_date)) }}
+                            </p>
+                            @if ($simulation->total_duration <= 60)
+                                    <p><b>Duración (Segundos): </b>{{ $simulation->total_duration }}</p>
+                            @endif
+                            @if ($simulation->total_duration > 60 && $simulation->total_duration < 3600)
+                                <p><b>Duración (Minutos): </b>{{ $simulation->total_duration / 60 }}</p>
+                            @endif
+                            @if ($simulation->total_duration >= 3600 )
+                                <p><b>Duración (Horas): </b>{{ $simulation->total_duration / 3600 }}</p>
+                            @endif
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -199,50 +222,7 @@
                             </div>
                         </div>
                         <div class="row monthly_table">
-                            {{-- <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover table-striped" id="simulations-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Mes</th>
-                                                <th>Total Recaudado</th>
-                                                @foreach ($taxes as $tax)
-                                                    <th>{{ $tax->name }} (-{{ $tax->percentage }}%)</th>
-                                                @endforeach
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($earnings as $earning)
-                                                <tr>
-                                                    <td>
-                                                        {{ $earning->parking_id }}
-                                                    </td>
-                                                    <td>
-                                                        $ {{ $earning->total }}
 
-                                                    </td>
-                                                    @foreach ($taxes as $tax)
-                                                        <td>
-                                                            $ {{ round($earning->total * ($tax->percentage / 100)) }}
-                                                        </td>
-                                                    @endforeach
-                                                </tr>
-                                            @endforeach
-                                            <tr class="warning">
-                                                <td>
-                                                    <b>TOTAL</b>
-                                                </td>
-                                                <td>$ {{ $total_earnings }}</td>
-                                                @foreach ($taxes as $tax)
-                                                    <td>
-                                                        $ {{ round($total_earnings * ($tax->percentage / 100)) }}
-                                                    </td>
-                                                @endforeach
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -265,20 +245,49 @@
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
-                            <li class="list-group-item">
-                                <span class="badge">14</span>
-                                Cras justo odio
-                            </li>
-                            <li class="list-group-item">
-                                <span class="badge">2</span>
-                                Dapibus ac facilisis in
-                            </li>
+                            @foreach ($parkings_to_improve as $parkings)
+                                <li class="list-group-item">
+                                    <span class="badge">{{ count($parkings['parkings']) }}</span>
+                                    <a href="#" data-toggle="modal" data-target="#parkings-modal">
+                                        {{ $parkings['vehicle_type'] }}
+                                    </a>
+                                </li>
+                            @endforeach
                         </ul>
-
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="modal fade" id="parkings-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Parqueaderos para mejorar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @foreach ($parking_to_improve as $value)
+                                    
+                                @endforeach
+                                {{-- <div class="form-group">
+                                    <label class="col-lg-2 control-label" for="parking-name-modal">Nombre</label>
+                                    <div class="col-lg-10">
+                                        <input type="hidden" name="parking-id-modal" id="parking-id-modal">
+                                        <input class="form-control" type="text" placeholder="Nombre del Parqueadero" name="parking-name-modal" id="parking-name-modal">
+                                    </div>
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" id="update-button">Editar</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
