@@ -27,7 +27,7 @@ use App\Http\Controllers\YaoDate;
 
 class SimulationController extends Controller {
 
-    private static $vehicle_types_list = null;
+    // private static $vehicle_types_list = null;
     // private static $movements_list = null;
 
     private static $simulation = 1;
@@ -518,7 +518,7 @@ class SimulationController extends Controller {
         Redis::flushAll();
 
         $initial_time = Carbon::now(-5);
-        ini_set('max_execution_time', 3600);
+        ini_set('max_execution_time', 36000);
 
         // $actual_date = Carbon::create(2012, 1, 31, 6, 0);
         // $end_date = Carbon::create(2012, 2, 2, 22, 00);
