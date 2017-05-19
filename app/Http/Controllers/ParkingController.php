@@ -48,7 +48,6 @@ class ParkingController extends Controller {
         return view('parkings.show', [
             'id' => $id,
             'title' => 'Parqueadero #' . $parking->id,
-            'parking_name' => $parking->name,
             'simulations' => $simulations,
             'simluations_ids' => $simulations_ids,
             'total_by_simulations' => $total_by_simulations
@@ -69,7 +68,6 @@ class ParkingController extends Controller {
         //     return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
         // } else {
             $parking = new Parking();
-            $parking->name = $request->name;
 
             $parking->save();
 
@@ -80,8 +78,7 @@ class ParkingController extends Controller {
     }
 
     public function update(Request $request) {
-        $parking = Parking::findOrFail($request->id);
-        $parking->name = $request->name;
+        $parking = Parking::findOrFail($request->id);        
 
         $parking->save();
 

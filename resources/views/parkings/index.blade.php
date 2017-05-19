@@ -31,10 +31,6 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
-                            <label>Nombre</label>
-                            <input class="form-control" name="parking_name" id="parking_name" placeholder="Nombre del Parqueadero" value="">
-                        </div>
-                        <div class="form-group">
                             <button type="button" class="pull-right btn btn-primary" id="store-button">Agregar</button>
                         </div>
                     </div>
@@ -45,7 +41,7 @@
                     <table class="table table-bordered table-hover table-striped" id="parkings-table">
                         <thead>
                             <tr>
-                                <th>Nombre</th>
+                                <th>ID</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -58,12 +54,11 @@
                                         title="<b>Detalles</b>"
                                         data-html="true"
                                         data-content="
-                                            <b>ID:</b> {{ $parking->id }} <br>
                                             <b>Fecha de Creación:</b> {{ $parking->created_at }} <br>
                                             <b>Última Modificación:</b> {{ $parking->updated_at }}"
                                         {{-- style="cursor: pointer"> --}}
                                         href="/parkings/show/{{ $parking->id }}">
-                                            {{ $parking->name }}
+                                            {{ $parking->id }}
                                         </a>
                                     </td>
                                     <td>
@@ -78,56 +73,12 @@
                                                 pull-right btn btn-success"
                                                 >Activar
                                             @endif
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            data-toggle="modal"
-                                            data-target="#parkings-modal"
-                                            data-id="{{ $parking->id }}"
-                                            data-name="{{ $parking->name }}"
-                                            class="pull-right btn btn-primary edit-modal edit-{{ $parking->id }}"
-                                            @if ($parking->active == 0)
-                                                disabled="">
-                                            @else
-                                                >
-                                            @endif
-                                            Editar
-                                        </button>
+                                        </button>                                        
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="modal fade" id="parkings-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Editar Parqueadero</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="col-lg-2 control-label" for="parking-name-modal">Nombre</label>
-                                    <div class="col-lg-10">
-                                        <input type="hidden" name="parking-id-modal" id="parking-id-modal">
-                                        <input class="form-control" type="text" placeholder="Nombre del Parqueadero" name="parking-name-modal" id="parking-name-modal">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" id="update-button">Editar</button>
-                    </div>
                 </div>
             </div>
         </div>

@@ -269,9 +269,9 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
-                                @foreach ($parking_to_improve as $value)
-                                    
-                                @endforeach
+                                {{-- @foreach ($parking_to_improve as $value)
+
+                                @endforeach --}}
                                 {{-- <div class="form-group">
                                     <label class="col-lg-2 control-label" for="parking-name-modal">Nombre</label>
                                     <div class="col-lg-10">
