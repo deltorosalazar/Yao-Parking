@@ -16,8 +16,8 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('role_id')->default(1);
-            $table->string('name');            
-            $table->string('phone');
+            $table->string('name');
+            $table->string('phone')->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->tinyInteger('active')->default('1');

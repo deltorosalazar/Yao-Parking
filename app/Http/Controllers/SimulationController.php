@@ -256,6 +256,9 @@ class SimulationController extends Controller {
             }
         }
 
+        // dd($parkings_to_improve_motorcycle);
+        // exit;
+
         $parkings_to_improve[] = array(
             'vehicle_type' => 'Motos',
             'parkings' => $parkings_to_improve_motorcycle

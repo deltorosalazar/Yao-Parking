@@ -46,10 +46,16 @@
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ Auth::user()->name }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fa fa-fw fa-power-off"></i> Cerrar Sesión
+                            </a>
+
+                            <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
                         </li>
                     </ul>
                 </li>
@@ -67,18 +73,18 @@
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo" class="{{ !Request::is('users') || !Request::is('roles') ? 'collapsed' : '' }}" aria-expanded="{{ Request::is('users') || Request::is('roles') ? 'true' : '' }}"><i class="fa fa-fw fa-arrows-v"></i> Gestión de Usuarios <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse">
                             <li>
-                                <a href="{{ url('/users') }}"><i class="fa fa-fw fa-dashboard"></i> Usuarios</a>
+                                <a href="{{ url('/users') }}"><i class="fa fa-fw fa-user"></i> Usuarios</a>
                             </li>
                             <li>
-                                <a href="{{ url('/roles') }}"><i class="fa fa-fw fa-dashboard"></i> Roles</a>
+                                <a href="{{ url('/roles') }}"><i class="fa fa-fw fa-users"></i> Roles</a>
                             </li>
                         </ul>
                     </li>
                     <li class="{{ Request::is('prices') ? 'active' : '' }}">
-                        <a href="{{ url('/prices') }}"><i class="fa fa-fw fa-bar-chart-o"></i> Tarifas</a>
+                        <a href="{{ url('/prices') }}"><i class="fa fa-fw fa-usd"></i> Tarifas</a>
                     </li>
                     <li class="{{ Request::is('vehicle_types') ? 'active' : '' }}">
-                        <a href="{{ url('/vehicle_types') }}"><i class="fa fa-fw fa-table"></i> Tipos de Vehículo</a>
+                        <a href="{{ url('/vehicle_types') }}"><i class="fa fa-fw fa-car"></i> Tipos de Vehículo</a>
                     </li>
                     <li class="{{ Request::is('parkings/*') || Request::is('parkings') ? 'active' : '' }}">
                         <a href="{{ url('/parkings') }}"><i class="fa fa-fw fa-table"></i> Parqueaderos</a>

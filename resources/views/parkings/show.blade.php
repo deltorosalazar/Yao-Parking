@@ -37,7 +37,7 @@
                                 @foreach ($simulations as $simulation)
                                     <tr>
                                         <td>
-                                            <a href="/parkings/show/{{ $id }}">
+                                            <a href="/simulations/show/{{ $id }}">
                                                 {{ $simulation->simulation_id }}
                                             </a>
                                         </td>

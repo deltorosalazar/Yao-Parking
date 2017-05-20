@@ -248,7 +248,7 @@
                             @foreach ($parkings_to_improve as $parkings)
                                 <li class="list-group-item">
                                     <span class="badge">{{ count($parkings['parkings']) }}</span>
-                                    <a href="#" data-toggle="modal" data-target="#parkings-modal">
+                                    <a href="#" data-toggle="modal" data-target="#parkings-{{ $parkings['vehicle_type'] }}-modal">
                                         {{ $parkings['vehicle_type'] }}
                                     </a>
                                 </li>
@@ -259,41 +259,45 @@
             </div>
         </div>
 
-        <div class="modal fade" id="parkings-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Parqueaderos para mejorar</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                {{-- @foreach ($parking_to_improve as $value)
-
-                                @endforeach --}}
-                                {{-- <div class="form-group">
-                                    <label class="col-lg-2 control-label" for="parking-name-modal">Nombre</label>
-                                    <div class="col-lg-10">
-                                        <input type="hidden" name="parking-id-modal" id="parking-id-modal">
-                                        <input class="form-control" type="text" placeholder="Nombre del Parqueadero" name="parking-name-modal" id="parking-name-modal">
+        @if (count($parkings['parkings']) > 0)
+            @foreach ($parkings_to_improve as $parkings)
+                <div class="modal fade" id="parkings-{{ $parkings['vehicle_type'] }}-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Parqueaderos a mejorar para {{ $parkings['vehicle_type'] }}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-group">
+                                            @for ($j=0; $j < ceil(count($parkings['parkings']) / 2); $j++)
+                                                <li class="list-group-item">
+                                                    Parqueadero #{{ $parkings['parkings'][$j] }}
+                                                </li>
+                                            @endfor
+                                        </ul>
                                     </div>
-                                </div> --}}
+                                    <div class="col-md-6">
+                                        <ul class="list-group">
+                                            @for ($j=ceil(count($parkings['parkings']) / 2); $j < count($parkings['parkings']); $j++)
+                                                <li class="list-group-item">
+                                                    Parqueadero #{{ $parkings['parkings'][$j] }}
+                                                </li>
+                                            @endfor
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" id="update-button">Editar</button>
-                    </div>
                 </div>
-            </div>
-        </div>
-
-
-
-
-
+            @endforeach
+        @endif
     </div>
 
 
