@@ -39,12 +39,6 @@ class ParkingController extends Controller {
             $total_by_simulations[] = ($s->total);
         }
 
-        // exit;
-
-        // dd($simulations);
-        // exit;
-
-
         return view('parkings.show', [
             'id' => $id,
             'title' => 'Parqueadero #' . $parking->id,
@@ -55,30 +49,14 @@ class ParkingController extends Controller {
     }
 
     public function store(Request $request) {
-        // $rules = array(
-        //     'parking_name' => 'required',
-        // );
-        //
-        // $messages = [
-        //     '_name.required' => 'Ingrese un Nombre',
-        // ];
-        //
-        // $validator = Validator::make(Input::all(), $rules, $messages);
-        // if ($validator->fails()) {
-        //     return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
-        // } else {
-            $parking = new Parking();
+        $parking = new Parking();
+        $parking->save();
 
-            $parking->save();
-
-            return response()->json($parking);
-        // }
-
-
+        return response()->json($parking);
     }
 
     public function update(Request $request) {
-        $parking = Parking::findOrFail($request->id);        
+        $parking = Parking::findOrFail($request->id);
 
         $parking->save();
 

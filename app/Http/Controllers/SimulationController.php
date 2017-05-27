@@ -27,18 +27,11 @@ use App\Http\Controllers\YaoDate;
 
 class SimulationController extends Controller {
 
-    // private static $vehicle_types_list = null;
-    // private static $movements_list = null;
-
     private static $simulation = 1;
 
     private static $vehicle_id = 1;
 
     public function index() {
-        // echo memory_get_usage();
-        // var_dump($this->getSystemMemInfo());
-        // exit;
-
         $simulations = Simulation::all();
         $total_parkings = Parking::where('active', 1)->get();
         $total_vehicle_types = VehicleType::count();
@@ -56,25 +49,6 @@ class SimulationController extends Controller {
 
     public function store(Request $request) {
 
-        // dd($request);
-        // exit();
-
-
-        // $rules = array(
-        //     'start_date' => 'required',
-        //     'end_date' => 'required'
-        // );
-        //
-        // $messages = [
-        //     'start_date.required' => 'Ingrese una Fecha de Inicio',
-        //     'end_date.required' => 'Ingrese una Fecha de Finalización',
-        // ];
-        //
-        // $validator = Validator::make(Input::all(), $rules, $messages);
-        // if ($validator->fails()) {
-        //     return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
-        // } else {
-
             $simulation = new Simulation();
 
             $simulation->start_date = $request->start_date;
@@ -85,22 +59,13 @@ class SimulationController extends Controller {
 
             $start_date = $request->start_date;
             $finish_date = $request->finish_date;
-            // dd($simulation);
-            // exit;
 
             $result = $this->startSimulation($simulation->id, $start_date, $finish_date);
-            // return response()->json($simulation);
-
-            // dd($result);
-            // exit;
-
-
 
             return view('simulations.completed', [
                 'title' => 'Simulación Finalizada',
                 'status' => $result
             ]);
-        // }
     }
 
     public function show($id) {
@@ -122,9 +87,6 @@ class SimulationController extends Controller {
             ->select(DB::raw('parking_id'))
             ->distinct()
             ->get();
-
-        // dd($years);
-        // exit;
 
         $vehicle_types = VehicleType::where('active', 1)->get();
         $movements = Movement::where('id', 1)->orWhere('id', 2)->get();
@@ -177,7 +139,6 @@ class SimulationController extends Controller {
             'total_earnings' => $this->computeTotalEarnings($earnings),
             'vehicle_types_earnings' => $vehicle_types_earnings,
             'total_vehicle_types_earnings' => $this->computeTotalEarningsByVehicleType($vehicle_types_earnings),
-            // 'monthly_earnings' => $this->computeMonthlyEarnings(),
             'parkings_to_improve' => $this->improveQuotas(),
             'years' => $years,
             'parkings' => $parkings,
@@ -256,9 +217,6 @@ class SimulationController extends Controller {
             }
         }
 
-        // dd($parkings_to_improve_motorcycle);
-        // exit;
-
         $parkings_to_improve[] = array(
             'vehicle_type' => 'Motos',
             'parkings' => $parkings_to_improve_motorcycle
@@ -269,11 +227,6 @@ class SimulationController extends Controller {
             'parkings' => $parkings_to_improve_bicycle
         );
 
-        // foreach ($parkings_to_improve as $parking) {
-        //     dd($parking);
-        // }
-        // exit;
-
         return $parkings_to_improve;
     }
 
@@ -282,25 +235,7 @@ class SimulationController extends Controller {
         $parkings = Parking::where('active', 1)->get();
         $quotas = array();
 
-
-
         foreach ($parkings as $parking) {
-
-        // }
-        // for ($i=1; $i <= 100 ; $i++) {
-            // $quota = new Quota();
-            //
-            // $quota->simulation_id = self::$simulation;
-            // $quota->parking_id = $i;
-            //
-            // foreach ($vehicle_types as $vehicle_type) {
-            //     $quota->vehicle_type_id = $vehicle_type->id;
-            //     $quota->max_quantity = Redis::hGet('parking:' . $i, 'mx_qty_' . $vehicle_type->id);
-            //     $quota->vehicles_exceeded = Redis::hGet('parking:' . $i, 'vehicles_exceeded' . $vehicle_type->id);
-            //
-            //     DB::table("quotas")->insert($quota->toArray());
-            // }
-
             foreach ($vehicle_types as $vehicle_type) {
                 $quota = array(
                     'simulation_id' => self::$simulation,
@@ -312,12 +247,7 @@ class SimulationController extends Controller {
                 );
 
                 $quotas[] = $quota;
-
-
             }
-
-
-            // $quota->save();
         }
 
         DB::table("quotas")->insert($quotas);
@@ -365,76 +295,32 @@ class SimulationController extends Controller {
         $actual_qty = Redis::hGet('parking:' . $params['actualParking'] , 'actual_qty_' . $params['vehicle_type_in']);
         $mx_qty = Redis::hGet('parking:' . $params['actualParking'], 'mx_qty_' . $params['vehicle_type_in']);
 
-        // echo "<br>";
-        // echo "=================";
-        // echo "<br>";
-        // echo "Parqueadero = " . $params['actualParking'];
-        // echo "<br>";
-        // echo "Tipo de Vehiculo = " . $params['vehicle_type_in'];
-        // echo "<br>";
-        // echo "Cantidad Actual = " . $actual_qty;
-        // echo "<br>";
-        // echo "Cantidad Máxima = " . $mx_qty;
-        // echo "<br>";
-        // echo "=================";
-
         if ($actual_qty < $mx_qty) {
             Redis::sAdd('set_parking:' . $params['actualParking'] . ":" . $params['vehicle_type_in'], self::$vehicle_id);
             Redis::hSet('vehicle:' . self::$vehicle_id, 'vehicle_type', $params['vehicle_type_in']);
             Redis::hSet('vehicle:' . self::$vehicle_id, 'in_date', $params['actual_date']);
             Redis::hIncrBy('parking:' . $params['actualParking'], 'actual_qty_' . $params['vehicle_type_in'], 1);
 
-            // echo "<br>";
-            // echo "Nueva cantidad = " . Redis::hGet('parking:' . $params['actualParking'] , 'actual_qty_' . $params['vehicle_type_in']);
-
             $detail->in_date = $params['actual_date'];
             $detail->vehicle_id = self::$vehicle_id;
-
-            // echo "<br>";
-            // echo "Se agregó el vehículo " . self::$vehicle_id . " al Parqueadero " . $params['actualParking'];
-            // echo "<br>";
 
             self::$vehicle_id++;
         } else {
             $detail->comment = 'No hay espacio parqueadero';
 
             Redis::hIncrBy('parking:' . $params['actualParking'], 'vehicles_exceeded' . $params['vehicle_type_in'], 1);
-            // falta por ahcer la cuenta de cuantos vehiculos no pudieron entrar al parquedero
         }
 
         DB::table("simulation_details")->insert($detail->toArray());
-        // $detail->save();
     }
 
     public function out($params, $detail) {
         $detail->movement_id = 2;
 
-        // echo "<br>";
-        // echo "=================";
-        // echo "<br>";
-        // echo "Parqueadero = " . $params['actualParking'];
-        // echo "<br>";
-        // echo "Tipo de Vehiculo para Salir = " . $params['vehicle_type_out'];
-        // echo "<br>";
-        // echo "Cantidad Actual = " . Redis::hGet('parking:' . $params['actualParking'], 'actual_qty_' . $params['vehicle_type_out']);
-        // echo "<br>";
-        // echo "=================";
-        // echo "<br>";
-
-        // echo "*********************************************************************************************************";
-        // echo "*******************************************************";
-        // echo "<br>";
-        // var_dump(Redis::hGetAll('parking:' . $params['actualParking']));
-        // echo "<br>";
-        // echo "*********************************************************************************************************";
-        // echo "*******************************************************";
-        // echo "<br>";
-
         if (Redis::hGet('parking:' . $params['actualParking'], 'actual_qty_' . $params['vehicle_type_out']) > 0) {
             $random_vehicle = Redis::sRandMember('set_parking:' . $params['actualParking'] . ":" . $params['vehicle_type_out']);
             $in_date = Redis::hGet('vehicle:' . $random_vehicle , 'in_date');
 
-            // Aqui se calcular si el vehiculo ha estado mas de 5 minutos
             if (YaoDate::minimumTime($in_date, $params['actual_date'])) {
                 Redis::sRem('set_parking:' . $params['actualParking'] . ":" . $params['vehicle_type_out'], $random_vehicle);
                 Redis::hIncrBy('parking:' . $params['actualParking'], 'actual_qty_' . $params['vehicle_type_out'], -1);
@@ -445,96 +331,23 @@ class SimulationController extends Controller {
                 Redis::del('vehicle:' . $random_vehicle);
 
                 $detail->price = YaoDate::computePrice($in_date, $params['actual_date'], $params['vehicle_type_out']);
-
-                // echo "Se eliminó el vehículo " . $random_vehicle . " del Parqueadero " . $params['actualParking'];
-                // echo "<br>";
-                // echo "*********************************************************************************************************";
-                // echo "*******************************************************";
-                // echo "<br>";
-                // var_dump(Redis::hGetAll('parking:' . $params['actualParking']));
-                // echo "*********************************************************************************************************";
-                // echo "*******************************************************";
-                // echo "<br>";
             } else {
                 $detail->comment = 'El vehiculo ha estado menos de 5 minutos';
             }
         } else {
-            // echo "Parqueadero vacío";
-            // echo "<br>";
             $detail->comment = 'No había ningún vehículo de ese tipo en el parqueadero';
         }
         DB::table("simulation_details")->insert($detail->toArray());
-        // $detail->save();
-    }
-
-    public function testSimulation() {
-
-        $this->createLists();
-
-        $vt_e = [1,1,1,1,2,2,2,2,3,3,3,3,1,1,1];
-
-        $vt_s = [1,1,1,1,2,2,2,2,3,3,3,3,1,1,1];
-
-        for ($i=0; $i < count($vt_e); $i++) {
-
-            $detail = new SimulationDetail();
-            $detail->simulation_id = 1; //CAmbiar, poner dinamico
-            $detail->parking_id = 1;
-            $detail->vehicle_type_id = $vt_e[$i];
-            $detail->movement_id = 1;
-
-            $params = [
-                'actualParking' => 1,
-                'movement' => 1,
-                'vehicle_type_in' => $vt_e[$i],
-                // 'vehicle_type_out' => $vehicle_type_out,
-                'actual_date' => Carbon::create(2012, 1, 31, 0),
-            ];
-
-            $this->in($params, $detail);
-        }
-
-        for ($i=0; $i < count($vt_s) ; $i++) {
-            $detail = new SimulationDetail();
-            $detail->simulation_id = 1; //CAmbiar, poner dinamico
-            $detail->parking_id = 1;
-            $detail->vehicle_type_id = $vt_s[$i];
-            $detail->movement_id = 2;
-
-            $params = [
-                'actualParking' => 1,
-                'movement' => 1,
-                // 'vehicle_type_in' => $vt_s[$i],
-                'vehicle_type_out' => $vt_s[$i],
-                'actual_date' => Carbon::create(2012, 1, 31, 0),
-            ];
-
-            $this->out($params, $detail);
-        }
-
-
-
     }
 
     public function startSimulation($id, $start_date, $finish_date) {
-
         Redis::flushAll();
 
         $initial_time = Carbon::now(-5);
         ini_set('max_execution_time', 36000);
 
-        // $actual_date = Carbon::create(2012, 1, 31, 6, 0);
-        // $end_date = Carbon::create(2012, 2, 2, 22, 00);
-
-
         $actual_date = Carbon::parse($start_date);
         $end_date = Carbon::parse($finish_date);
-
-        // echo $actual_date;
-        // echo $end_date;
-        //
-        // exit;
-
 
         $christmas = Carbon::create(1990, 12, 31, 0, 0, 0);
         $new_year = Carbon::create(1990, 12, 24, 0, 0, 0);
@@ -544,19 +357,11 @@ class SimulationController extends Controller {
         $total_days = $actual_date->diffInDays($end_date);
         $total_minutes = $actual_date->diffInMinutes($end_date);
 
-        // echo $total_minutes;
-        // exit;
-
-        // echo $total_hours;
-        // exit();
-
         $existingParkings = count(Redis::keys('parking:*'));
 
 
         while(!$actual_date->gte($end_date)) {
-        // for ($j=0; $j < $total_minutes; $j++) {
             for ($i=1; $i <= $existingParkings; $i++) {
-            // for ($i=1; $i <= $existingParkings; $i++) {
 
                 $actual_parking = $i;
 
@@ -565,70 +370,35 @@ class SimulationController extends Controller {
                 $vehicle_type_out = Redis::sRandMember('vehicle_types_set');
 
                 $detail = new SimulationDetail();
-                $detail->simulation_id = $id; // Cambiar, poner dinámico
+                $detail->simulation_id = $id;
                 $detail->parking_id = $actual_parking;
                 $detail->vehicle_type_id = $vehicle_type_in;
-                // $detail->movement_id = $movement;
 
                 $params = [
                     'actualParking' => $actual_parking,
-                    // 'movement' => $movement,
                     'vehicle_type_in' => $vehicle_type_in,
                     'vehicle_type_out' => $vehicle_type_out,
                     'actual_date' => $actual_date,
                 ];
 
                 if ($movement == 1) {
-                    // echo "<br>";
-                    // echo "<b>Entrada</b> - " . "Parqueadero = " . $actual_parking;
-                    // echo "<br>";
-                    // echo "Tipo de Vehiculo = " . $vehicle_type_in;
                     $this->in($params, $detail);
 
                 } else if ($movement == 2) {
-                    // echo "<br>";
-                    // echo "<b>Salida</b> - " . "Parqueadero " . $actual_parking;
-                    // echo "<br>";
-                    // echo "Tipo de Vehiculo = " . $vehicle_type_out;
                     $this->out($params, $detail);
 
                 } else {
-                    // DB::table("simulation_details")->insert($detail->toArray());
-                    // $detail->save();
-
-
-                    // echo "<br>";
-                    // echo "<b>Entrada / Salida</b> - " . "Parqueadero = " . $actual_parking;
-                    // echo "<br>";
-
-                    // $detail = new SimulationDetail();
-                    // $detail->simulation_id = 1; //CAmbiar, poner dinamico
-                    // $detail->parking_id = $actual_parking;
-                    // $detail->vehicle_type_id = $vehicle_type_in;
-                    // $detail->movement_id = 1;
-
-
-                    // echo "<br>";
-                    // echo "<b>E/S (Entrada)</b> - Parqueadero = " . $actual_parking;
                     $this->in($params, $detail);
 
                     $detail = new SimulationDetail();
-                    $detail->simulation_id = $id; //CAmbiar, poner dinamico
+                    $detail->simulation_id = $id;
                     $detail->parking_id = $actual_parking;
                     $detail->vehicle_type_id = $vehicle_type_out;
-                    // $detail->movement_id = 2;
 
-                    // echo "<br>";
-                    // echo "<br>";
-                    // echo "<b>E/S (Salida)</b> - Parqueadero = " . $actual_parking;
                     $this->out($params, $detail);
                 }
-
-                // echo "<br>";
             }
 
-            // echo "==========================================================================================";
-            // echo "==========================================================================================";
             $actual_date->addMinute();
 
             if ($actual_date->hour == 23) {
@@ -643,33 +413,7 @@ class SimulationController extends Controller {
 
         $this->fillQuotasTable();
 
-        // echo '<br>';
-        // echo '<br>';
-        // echo '<br>';
-        // echo 'Fecha Final:    ' . $actual_date;
-
         $final_time = Carbon::now(-5);
-
-        // return redirect()->route('simulations.completed', [
-        //     'title' => 'Simulación Finalizada',
-        //     'simulation_initial_date' => $start_date,
-        //     'simulation_finish_date' => $finish_date,
-        //     'initial_time' => $initial_time,
-        //     'final_time' => $final_time,
-        //     'total_duration' => Carbon::parse($initial_time)->diffInMinutes($final_time),
-        // ]);
-
-        // return view('simulations.completed', [
-        //     'title' => 'Simulación Finalizada',
-        //     'simulation_initial_date' => $start_date,
-        //     'simulation_finish_date' => $finish_date,
-        //     'initial_time' => $initial_time,
-        //     'final_time' => $final_time,
-        //     'total_duration' => Carbon::parse($initial_time)->diffInMinutes($final_time),
-        // ]);
-
-        setlocale(LC_TIME, 'Spanish');
-
 
         $allocated_memory = memory_get_usage()/1048576;
         $total_duration = $initial_time->diffInSeconds($final_time);
@@ -683,8 +427,6 @@ class SimulationController extends Controller {
             'total_duration' => $total_duration,
         );
 
-        // dd($results);
-
 
         $simulation = Simulation::find($id);
         $simulation->total_duration = $total_duration;
@@ -693,11 +435,6 @@ class SimulationController extends Controller {
 
 
         return $results;
-
-        // $this->completed($results);
-
-        // return Redirect::action('SimulationController@index');
-
     }
 
     public function completed($results) {

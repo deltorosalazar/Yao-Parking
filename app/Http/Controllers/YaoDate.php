@@ -54,12 +54,6 @@ class YaoDate extends Controller {
 
         $vehicle_type_prices = self::getValues($vehicle_type);
 
-        // $in_date = Carbon::create(2010, 10, 10, 8, 03);
-        // $out_date = Carbon::create(2010, 10, 15, 6, 06);
-
-        // $in_date = Carbon::create(2010, 10, 10, 8, 03);
-        // $out_date = Carbon::create(2010, 10, 10, 15, 03);
-
         $total_days = $in_date->diffInDays($out_date);
 
         $first_day_minutes = $in_date->diffInMinutes($out_date);
@@ -92,9 +86,6 @@ class YaoDate extends Controller {
         }
 
         return $total_price;
-
-
-
 
     }
 

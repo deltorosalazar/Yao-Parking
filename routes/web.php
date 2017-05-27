@@ -11,14 +11,6 @@
 |
 */
 
-use Illuminate\Support\Facades\Redis;
-
-use Carbon\Carbon;
-use App\Http\Controllers\YaoDate;
-
-
-use App\User;
-use App\VehicleType;
 use App\SimulationDetail;
 
 Route::get('/', function () {
@@ -67,4 +59,21 @@ Route::get('/simulations/show/{id}', 'SimulationController@show');
 Route::post('/simulations/store', 'SimulationController@store');
 Route::get('/simulations/start', 'SimulationController@startSimulation');
 Route::post('/simulations/monthly_earnings', 'SimulationController@computeMonthlyEarnings');
-Route::get('/simulations/completed', 'SimulationController@completed');
+
+Route::get('/burn', function() {
+    while(true) {
+        $s = new SimulationDetail();
+        $s->parking_id = 1;
+        $s->movement_id = 1;
+        $s->simulation_id = 1;
+        $s->vehicle_type_id = 1;
+        $s->vehicle_id = 1;
+        $s->price = 15000;
+        $s->comment = 'comentario';
+        $s->in_date = \Carbon\Carbon::now();
+        $s->out_date = \Carbon\Carbon::now();
+
+        $s->save();
+
+    }
+});
