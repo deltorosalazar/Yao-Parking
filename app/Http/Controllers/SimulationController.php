@@ -19,11 +19,8 @@ use App\SimulationDetail;
 use App\Quota;
 use App\Tax;
 
-
 use App\User;
 use App\Http\Controllers\YaoDate;
-
-
 
 class SimulationController extends Controller {
 
@@ -44,28 +41,23 @@ class SimulationController extends Controller {
         ]);
     }
 
-
-
-
     public function store(Request $request) {
+        $simulation = new Simulation();
 
-            $simulation = new Simulation();
+        $simulation->start_date = $request->start_date;
+        $simulation->finish_date = $request->finish_date;
 
-            $simulation->start_date = $request->start_date;
-            $simulation->finish_date = $request->finish_date;
+        $simulation->save();
 
-            $simulation->save();
+        $start_date = $request->start_date;
+        $finish_date = $request->finish_date;
 
+        $result = $this->startSimulation($simulation->id, $start_date, $finish_date);
 
-            $start_date = $request->start_date;
-            $finish_date = $request->finish_date;
-
-            $result = $this->startSimulation($simulation->id, $start_date, $finish_date);
-
-            return view('simulations.completed', [
-                'title' => 'Simulación Finalizada',
-                'status' => $result
-            ]);
+        return view('simulations.completed', [
+            'title' => 'Simulación Finalizada',
+            'status' => $result
+        ]);
     }
 
     public function show($id) {

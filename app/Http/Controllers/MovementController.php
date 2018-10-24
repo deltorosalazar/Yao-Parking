@@ -15,8 +15,4 @@ class MovementController extends Controller {
             'movements' => $movements            
         ]);
     }
-
-    public function changeState(Request $request) {
-
-    }
 }

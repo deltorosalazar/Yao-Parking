@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class SimulationDetail extends Model {
-
     public function vehicle_types() {
         return $this->hasMany('App\VehicleType', 'id', 'vehicle_type_id');
     }

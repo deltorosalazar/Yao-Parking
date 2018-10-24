@@ -70,7 +70,6 @@ class ParkingController extends Controller {
         $parking->save();
 
         return response()->json($parking);
-
     }
 
 }

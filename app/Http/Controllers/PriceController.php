@@ -38,8 +38,6 @@ class PriceController extends Controller {
 
             return response()->json($price);
         }
-
-
     }
 
     public function update(Request $request) {
@@ -58,6 +56,5 @@ class PriceController extends Controller {
         $price->save();
 
         return response()->json($price);
-
     }
 }

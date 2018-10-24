@@ -43,12 +43,9 @@ class YaoDate extends Controller {
         return false;
     }
 
-    public static function computePrice($in_date, $out_date, $vehicle_type) {
-    // public static function computePrice($vehicle_type) {
-
+    public static function computePrice($in_date, $out_date, $vehicle_type) { 
         $in_date = Carbon::parse($in_date);
         $out_date = Carbon::parse($out_date);
-
 
         $total_price = 0;
 
