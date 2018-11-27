@@ -35,7 +35,7 @@ brew services start redis
 php artisan serve
 ```
 
-- In some occassions your would have to change the port
+- In some occassions you will have to change the port
 
 ```
 php artisan serve --port 9876
